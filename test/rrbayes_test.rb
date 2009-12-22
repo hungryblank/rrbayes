@@ -2,24 +2,26 @@ require 'teststrap'
 
 include Rrbayes
 
+DB_NUM = 0
+
 context "a new classifier" do
 
   setup do
-    db = Redis.new :db => 'rrbayes_test'
+    db = Redis.new :db => DB_NUM
     db.connect_to_server
     db.flushdb
-    @classifier = Classifier.new({:categories => %w(spam ham)}, :db => 'rrbayes_test')
+    @classifier = Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM)
   end
 
   should("persist categories") { topic.db.set_members('categories') }.equals %w(spam ham)
 
   should("load categories") { topic.send(:load_categories) }.equals %w(spam ham)
 
-  should("initialize with no categories") { Classifier.new.categories.map { |c| c.name } }.equals %w(spam ham)
+  should("initialize with no categories") { Classifier.new({}, :db => DB_NUM).categories.map { |c| c.name } }.equals %w(spam ham)
 
-  should("initialize with same categories") { Classifier.new(:categories => %w(spam ham)).categories.map { |c| c.name } }.equals %w(spam ham)
+  should("initialize with same categories") { Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM).categories.map { |c| c.name } }.equals %w(spam ham)
 
-  should("detect category mismatch") { Classifier.new({:categories => %w(bad good)}) }.raises(LoadingError)
+  should("detect category mismatch") { Classifier.new({:categories => %w(bad good)}, :db => DB_NUM) }.raises(LoadingError)
 
   context "in training" do
 
