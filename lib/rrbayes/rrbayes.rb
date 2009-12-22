@@ -1,5 +1,8 @@
 module Rrbayes
 
+  class LoadingError < ArgumentError
+  end
+
   class Classifier
 
     attr_reader :categories, :db
@@ -11,10 +14,9 @@ module Rrbayes
     #  Rrbayes.new(:categories => %w(spam ham), {:host => '127.0.0.1'})
     #
     def initialize(options = {}, redis_options = {})
-      raise "No categories specified for the classifier" unless options[:categories] || load_categories
       @db = Redis.new(redis_options)
       @db.connect_to_server
-      @categories = options[:categories].map { |c| Category.new(c, self) }
+      @categories = find_categories(options).map { |c| Category.new(c, self) }
     end
 
     #given a frequency hash and a category, stores teh frequency data
@@ -47,6 +49,17 @@ module Rrbayes
 
     def load_categories
       @db.set_members('categories')
+    end
+
+    def find_categories(options)
+      categories = load_categories
+      if categories.empty?
+        categories = options[:categories]
+        raise LoadingError, "No categories specified for the classifier" unless categories
+      elsif options[:categories] && options[:categories].sort != categories.sort
+        raise LoadingError, "you specified categories #{options[:as].inspect} but #{categories.inspect} were found in the db"
+      end
+      categories
     end
 
   end

@@ -15,6 +15,12 @@ context "a new classifier" do
 
   should("load categories") { topic.send(:load_categories) }.equals %w(spam ham)
 
+  should("initialize with no categories") { Classifier.new.categories.map { |c| c.name } }.equals %w(spam ham)
+
+  should("initialize with same categories") { Classifier.new(:categories => %w(spam ham)).categories.map { |c| c.name } }.equals %w(spam ham)
+
+  should("detect category mismatch") { Classifier.new({:categories => %w(bad good)}) }.raises(LoadingError)
+
   context "in training" do
 
     setup do
