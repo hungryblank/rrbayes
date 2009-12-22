@@ -1,17 +1,38 @@
-= rrbayes
+= Rrbayes (Ruby Redis Bayes)
 
-Description goes here.
+* http://github.com/hungryblank/rrbayes
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== Description
 
-== Copyright
+Rrbayes is a basic and simplified implementation of a naive bayesian classifier.
+It uses Redis http://github.com/antirez/redis to store the information
+necessary for the classification, this gives Rrbayes persistency and
+parallel processing support
+
+Rrbayes has been inspired by http://github.com/cardmagic/classifier
+
+== Development status
+
+At this stage Rrbayes is more than anything else an excuse to use Redis
+
+== Usage
+
+    require 'rrbayes'
+
+    classifier = Rrbayes::Classifier.new :categories => :spam, :ham
+
+    classifier.learn({'enlarge' => 1, 'your' => 2 ,'viagra' => 3} :as => 'spam')
+
+    classifier.learn({'dear' => 1, 'Jon' => 2 ,'how' => 3}, :as => 'ham'))
+
+    classifier.classify({'viagra' => 1, 'cheap' => 1})
+    => 'spam'
+
+== Thanks
+
+* Salvatore Sanfilippo for Redis
+* Rrbayes has been inspired by http://github.com/cardmagic/classifier
+
+== Author
 
 Copyright (c) 2009 hungryblank. See LICENSE for details.

@@ -5,11 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "rrbayes"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Rrbayes: Ruby Redis Bayes}
+    gem.description = %Q{Implementation of a naive Bayes classifier with a Redis backend}
     gem.email = "hungryblank@gmail.com"
     gem.homepage = "http://github.com/hungryblank/rrbayes"
     gem.authors = ["hungryblank"]
+    gem.add_dependency "redis", ">= 0"
     gem.add_development_dependency "riot", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

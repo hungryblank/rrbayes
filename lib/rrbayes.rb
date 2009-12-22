@@ -1,2 +1,2 @@
 require 'redis'
-require File.join(File.dirname(__FILE__), "rrbayes", "rrbayes")
+Dir.glob(File.join(File.dirname(__FILE__), "rrbayes", "*.rb")).each { |file| require file }
