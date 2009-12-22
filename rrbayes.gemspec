@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "lib/rrbayes.rb",
      "lib/rrbayes/category.rb",
      "lib/rrbayes/rrbayes.rb",
+     "rrbayes.gemspec",
      "test/rrbayes_test.rb",
      "test/teststrap.rb"
   ]
