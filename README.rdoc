@@ -1,10 +1,12 @@
 = Rrbayes (Ruby Redis Bayes)
 
+
 * http://github.com/hungryblank/rrbayes
 
 == Description
 
 Rrbayes is a basic and simplified implementation of a naive bayesian classifier.
+
 It uses Redis http://github.com/antirez/redis to store the information
 necessary for the classification, this gives Rrbayes persistency and
 parallel processing support
