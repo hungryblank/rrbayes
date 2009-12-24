@@ -41,9 +41,10 @@ context "a new classifier" do
 
     context "for a while" do
 
-      should("classify_spam") { @classifier.classify({'viagra' => 1, 'cheap' => 1}) }.equals 'spam'
+      should("classify spam") { @classifier.classify({'viagra' => 1, 'cheap' => 1}) }.equals 'spam'
 
-      should("classify_ham") { @classifier.classify({'dear' => 1, 'molly' => 2}) }.equals 'ham'
+      should("classify ham") { @classifier.classify({'dear' => 1, 'molly' => 2}) }.equals 'ham'
+
 
     end
 
