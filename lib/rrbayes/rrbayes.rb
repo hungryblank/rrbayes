@@ -37,7 +37,7 @@ module Rrbayes
     #  => 'spam'
     #
     def classify(frequency_map)
-      @categories.map { |c| [c.name, c.attributes_score(frequency_map)] }.sort_by { |c| -c[1] }.first[0]
+      @categories.sort_by { |c| -c.attributes_score(frequency_map) }.first.name
     end
 
     #Returns the category objects with the name provided in the argument
