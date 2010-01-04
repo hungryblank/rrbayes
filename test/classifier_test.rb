@@ -4,7 +4,7 @@ include Rrbayes
 
 DB_NUM = 0
 
-context "a new classifier" do
+context "a new spam/ham classifier" do
 
   setup do
     db = Redis.new :db => DB_NUM
@@ -13,17 +13,18 @@ context "a new classifier" do
     @classifier = Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM)
   end
 
-  should("persist categories") { topic.db.set_members('categories') }.equals %w(spam ham)
+  asserts("categories") { topic.db.set_members('categories') }.equals %w(spam ham)
 
-  should("load categories") { topic.send(:load_categories) }.equals %w(spam ham)
+  asserts("loaded categories") { topic.send(:load_categories) }.equals %w(spam ham)
 
-  should("initialize with no categories") { Classifier.new({}, :db => DB_NUM).categories.map { |c| c.name } }.equals %w(spam ham)
+  asserts("recognized categories") { Classifier.new({}, :db => DB_NUM).categories.map { |c| c.name } }.equals %w(spam ham)
 
-  should("initialize with same categories") { Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM).categories.map { |c| c.name } }.equals %w(spam ham)
+
+  asserts("initialize with same categories") { Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM).categories.map { |c| c.name } == %w(spam ham) }
 
   should("detect category mismatch") { Classifier.new({:categories => %w(bad good)}, :db => DB_NUM) }.raises(LoadingError)
 
-  context "in training" do
+  context "trained with spam and ham" do
 
     setup do
       spam_frequencies = {'enlarge' => 1, 'your' => 2 ,'viagra' => 3}
@@ -33,20 +34,15 @@ context "a new classifier" do
       @classifier.learn(ham_frequencies, :as => 'ham')
     end
 
-    should("store evidences number") { @classifier.db['spam:viagra'] }.equals '3'
+    asserts("evidences number") { @classifier.db['spam:viagra'] }.equals '3'
 
-    should("store category evidences total") { @classifier.db['documents:spam'] }.equals '1'
+    asserts("category evidences total") { @classifier.db['documents:spam'] }.equals '1'
 
-    should("store evidences total") { @classifier.db['documents'] }.equals '2'
+    asserts("evidences total") { @classifier.db['documents'] }.equals '2'
 
-    context "for a while" do
+    should("classify spam") { @classifier.classify({'viagra' => 1, 'cheap' => 1}) == 'spam' }
 
-      should("classify spam") { @classifier.classify({'viagra' => 1, 'cheap' => 1}) }.equals 'spam'
-
-      should("classify ham") { @classifier.classify({'dear' => 1, 'molly' => 2}) }.equals 'ham'
-
-
-    end
+    should("classify ham") { @classifier.classify({'dear' => 1, 'molly' => 2}) == 'ham' }
 
   end
 
