@@ -15,7 +15,6 @@ module Rrbayes
     #
     def initialize(options = {}, redis_options = {})
       @db = Redis.new(redis_options)
-      @db.connect_to_server
       @categories = find_categories(options).map { |c| Category.new(c, self) }
     end
 
@@ -48,7 +47,7 @@ module Rrbayes
     private
 
     def load_categories
-      @db.set_members('categories')
+      @db.smembers('categories')
     end
 
     def find_categories(options)

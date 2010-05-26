@@ -14,13 +14,13 @@ module Rrbayes
     end
 
     def learn(frequency_map)
-      @db.pipelined do |pipe|
+      @db.pipelined do
         frequency_map.each do |attribute, evidences|
-          pipe.incrby(attribute_key(attribute), evidences)
-          pipe.incrby(evidences_key, evidences)
+          @db.incrby(attribute_key(attribute), evidences)
+          @db.incrby(evidences_key, evidences)
         end
-        pipe.incr(documents_key)
-        pipe.incr(DOCUMENTS_SCOPE)
+        @db.incr(documents_key)
+        @db.incr(DOCUMENTS_SCOPE)
       end
     end
 

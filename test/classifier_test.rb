@@ -8,12 +8,11 @@ context "a new spam/ham classifier" do
 
   setup do
     db = Redis.new :db => DB_NUM
-    db.connect_to_server
     db.flushdb
     @classifier = Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM)
   end
 
-  asserts("categories") { topic.db.set_members('categories') }.equals %w(spam ham)
+  asserts("categories") { topic.db.smembers('categories') }.equals %w(spam ham)
 
   asserts("loaded categories") { topic.send(:load_categories) }.equals %w(spam ham)
 
