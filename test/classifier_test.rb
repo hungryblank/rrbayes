@@ -33,9 +33,9 @@ context "a new spam/ham classifier" do
       @classifier.learn(ham_frequencies, :as => 'ham')
     end
 
-    asserts("evidences number") { @classifier.db['spam:viagra'] }.equals '3'
+    asserts("evidences number for spam") { @classifier.category('spam').evidences_for('viagra') }.equals '3'
 
-    asserts("category evidences total") { @classifier.db['documents:spam'] }.equals '1'
+    asserts("category documents total") { @classifier.category('spam').documents_total }.equals '1'
 
     asserts("evidences total") { @classifier.db['documents'] }.equals '2'
 

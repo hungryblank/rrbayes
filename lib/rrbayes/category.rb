@@ -16,16 +16,14 @@ module Rrbayes
     def learn(frequency_map)
       @db.pipelined do
         frequency_map.each do |attribute, evidences|
-          @db.incrby(attribute_key(attribute), evidences)
-          @db.incrby(evidences_key, evidences)
+          store_evidences(attribute, evidences)
         end
-        @db.incr(documents_key)
-        @db.incr(DOCUMENTS_SCOPE)
+        increment_documents
       end
     end
 
     def attributes_score(attributes)
-      total = total_evidences.to_f
+      total = evidences_total.to_f
       attributes.map do |attribute, evidences|
         (evidences_for(attribute) || 0.1).to_f / total
       end.inject(0) do |score, attr_likelyhood|
@@ -34,17 +32,27 @@ module Rrbayes
     end
 
     def evidences_for(attribute)
-      @db.get(attribute_key(attribute))
+      @db.hget(name, attribute)
     end
 
-    def total_evidences
+    def evidences_total
       @db.get(evidences_key)
+    end
+
+    def documents_total
+      @db.get(documents_key)
     end
 
     private
 
-    def attribute_key(attribute)
-      key_for(name, attribute)
+    def store_evidences(attribute, evidences)
+      @db.hincrby(name, attribute, evidences)
+      @db.incrby(evidences_key, evidences)
+    end
+
+    def increment_documents
+      @db.incr(documents_key)
+      @db.incr(DOCUMENTS_SCOPE)
     end
 
     def evidences_key
