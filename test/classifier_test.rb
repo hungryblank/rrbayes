@@ -21,7 +21,7 @@ context "a new spam/ham classifier" do
 
   asserts("initialize with same categories") { Classifier.new({:categories => %w(spam ham)}, :db => DB_NUM).categories.map { |c| c.name } == %w(spam ham) }
 
-  should("detect category mismatch") { Classifier.new({:categories => %w(bad good)}, :db => DB_NUM) }.raises(LoadingError)
+  asserts("category mismatch") { Classifier.new({:categories => %w(bad good)}, :db => DB_NUM) }.raises(LoadingError)
 
   context "trained with spam and ham" do
 
