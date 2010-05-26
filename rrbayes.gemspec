@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rrbayes}
-  s.version = "0.0.2"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["hungryblank"]
-  s.date = %q{2009-12-22}
+  s.date = %q{2010-05-26}
   s.description = %q{Implementation of a naive Bayes classifier with a Redis backend}
   s.email = %q{hungryblank@gmail.com}
   s.extra_rdoc_files = [
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
      "lib/rrbayes/category.rb",
      "lib/rrbayes/rrbayes.rb",
      "rrbayes.gemspec",
-     "test/rrbayes_test.rb",
+     "test/classifier_test.rb",
      "test/teststrap.rb"
   ]
   s.homepage = %q{http://github.com/hungryblank/rrbayes}
@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Rrbayes: Ruby Redis Bayes}
   s.test_files = [
     "test/teststrap.rb",
-     "test/rrbayes_test.rb"
+     "test/classifier_test.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<redis>, [">= 2.0.0"])
       s.add_development_dependency(%q<riot>, [">= 0"])
     else
-      s.add_dependency(%q<redis>, [">= 0"])
+      s.add_dependency(%q<redis>, [">= 2.0.0"])
       s.add_dependency(%q<riot>, [">= 0"])
     end
   else

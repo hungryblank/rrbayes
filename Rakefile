@@ -10,7 +10,7 @@ begin
     gem.email = "hungryblank@gmail.com"
     gem.homepage = "http://github.com/hungryblank/rrbayes"
     gem.authors = ["hungryblank"]
-    gem.add_dependency "redis", ">= 0"
+    gem.add_dependency "redis", ">= 2.0.0"
     gem.add_development_dependency "riot", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
